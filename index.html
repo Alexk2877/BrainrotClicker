@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🧠 Укради Брейнрот | Исправлено</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: #0b0e14; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 8px; color: #f0f4fa; }
+        .game-container { max-width: 500px; width: 100%; background: #1a1f2b; border-radius: 36px; padding: 20px 16px 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05); border-bottom: 4px solid #00c9a7; }
+        h1, h2 { font-weight: 800; letter-spacing: -0.02em; }
+        h1 { font-size: 26px; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #fff; text-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .header-row { display: flex; justify-content: space-between; align-items: center; background: #252c3b; padding: 12px 16px; border-radius: 48px; margin-bottom: 20px; box-shadow: inset 0 2px 5px #0f131a, 0 6px 0 #0f131a; border-bottom: 2px solid #00c9a7; }
+        .id-block { background: #0f131a; padding: 8px 14px; border-radius: 40px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: #b3c7e5; word-break: break-all; max-width: 220px; }
+        .id-block span { color: #00c9a7; font-weight: 800; }
+        .online-badge { display: flex; align-items: center; gap: 6px; background: #1e3a2f; padding: 6px 14px; border-radius: 40px; color: #a3f0d0; font-weight: 700; font-size: 14px; }
+        .online-dot { width: 12px; height: 12px; background: #00e676; border-radius: 50%; box-shadow: 0 0 10px #00e676; }
+        .coins-panel { background: linear-gradient(145deg, #1e2532, #151b24); padding: 16px 18px; border-radius: 28px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: inset 0 2px 6px #0b0e14, 0 8px 0 #0b0e14; border-bottom: 2px solid #ffb347; }
+        .coins-label { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .coins-value { font-size: 36px; font-weight: 900; color: #ffd966; text-shadow: 0 3px 0 #9e6300; }
+        .click-area { background: radial-gradient(circle at 30% 20%, #3d4e6b, #1a2533); width: 100%; aspect-ratio: 1/0.9; border-radius: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 22px; box-shadow: 0 16px 0 #0f131a, inset 0 -4px 8px rgba(0,0,0,0.4), inset 0 8px 8px rgba(255,255,255,0.1); border-bottom: 4px solid #5f7faf; cursor: pointer; transition: all 0.05s; user-select: none; }
+        .click-area:active { transform: translateY(6px); box-shadow: 0 10px 0 #0f131a, inset 0 -4px 8px rgba(0,0,0,0.4); }
+        .brainrot-icon { font-size: 96px; filter: drop-shadow(0 12px 10px #00000050); }
+        .click-text { font-size: 28px; font-weight: 800; background: #2a3446; padding: 6px 28px; border-radius: 40px; margin-top: 8px; color: #fff; box-shadow: inset 0 2px 3px #0f131a; }
+        .tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+        .tab-btn { flex: 1 0 auto; background: #1e2532; border: none; border-bottom: 3px solid #3d506e; padding: 12px 0; border-radius: 30px; font-weight: 800; font-size: 16px; color: #b0c2da; box-shadow: inset 0 2px 4px #0b0e14, 0 6px 0 #0b0e14; cursor: pointer; transition: 0.1s; min-width: 70px; }
+        .tab-btn.active { background: #2d405b; color: white; border-bottom: 3px solid #00c9a7; transform: translateY(2px); box-shadow: inset 0 2px 4px #0b0e14, 0 4px 0 #0b0e14; }
+        .panel { background: #1a2230; border-radius: 28px; padding: 18px 14px; box-shadow: inset 0 1px 6px #0f131a, 0 6px 0 #0f131a; margin-top: 4px; border-bottom: 2px solid #2e4b6e; }
+        .shop-item, .brainrot-card, .leaderboard-item, .steal-item { display: flex; justify-content: space-between; align-items: center; background: #0f1722; margin-bottom: 10px; padding: 14px 16px; border-radius: 24px; box-shadow: inset 0 2px 5px #05080c; font-weight: 600; }
+        .btn { background: #00c9a7; border: none; padding: 10px 20px; border-radius: 40px; font-weight: 800; color: #0b0e14; box-shadow: 0 5px 0 #008b72; cursor: pointer; transition: 0.07s; border-bottom: 2px solid #aafff0; font-size: 15px; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #008b72; }
+        .btn:disabled { opacity: 0.5; transform: none; box-shadow: 0 5px 0 #008b72; pointer-events: none; }
+        .leaderboard-item .coins { color: #ffd966; font-weight: 800; font-size: 20px; }
+        .online-marker { width: 10px; height: 10px; background: #00e676; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 8px #00e676; }
+        .small-note { text-align: center; color: #8f9eb5; font-size: 14px; margin-top: 14px; }
+        .error-message { color: #ff8a8a; background: #3a2020; padding: 8px 14px; border-radius: 30px; margin: 8px 0; }
+        .input-field { background: #0b121c; color: white; padding: 14px 16px; border-radius: 40px; border: 1px solid #3a506e; width: 100%; font-size: 16px; margin-bottom: 14px; }
+        .brainrot-list { display: flex; flex-direction: column; gap: 10px; }
+        .owned-tag { background: #2e4b6e; padding: 4px 12px; border-radius: 20px; font-size: 14px; }
+        .id-full { word-break: break-all; font-size: 14px; }
+    </style>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+<div class="game-container">
+    <div class="header-row">
+        <div class="id-block">🆔 <span id="playerIdDisplay">-</span></div>
+        <div class="online-badge"><span class="online-dot"></span> <span id="onlineStatus">Онлайн</span></div>
+    </div>
+
+    <div class="coins-panel">
+        <span class="coins-label">🪙 Монеты</span>
+        <span class="coins-value" id="coinDisplay">0</span>
+    </div>
+
+    <div class="click-area" id="clickerButton">
+        <div class="brainrot-icon">🧠</div>
+        <div class="click-text">ТАП</div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="shop">🛒 Магазин</button>
+        <button class="tab-btn" data-tab="brainrots">🧸 Брейнроты</button>
+        <button class="tab-btn" data-tab="leaderboard">🏆 Рейтинг</button>
+        <button class="tab-btn" data-tab="steal">💰 Кража</button>
+    </div>
+
+    <div id="shopPanel" class="panel">
+        <div class="shop-item">
+            <span>⚡ Сила клика +1</span>
+            <button class="btn" id="buyClickUpgrade">Купить (20 🪙)</button>
+        </div>
+        <div class="shop-item">
+            <span>💎 Базовый множитель x2</span>
+            <button class="btn" id="buyMultiplier">Купить (80 🪙)</button>
+        </div>
+        <div class="small-note">🔹 Сила: <span id="clickPowerDisplay">1</span> | Баз. множ: x<span id="multiplierDisplay">1</span> | Бонус Брейнротов: +<span id="brainrotBonusDisplay">0</span>%</div>
+    </div>
+
+    <div id="brainrotsPanel" class="panel" style="display: none;">
+        <h2 style="margin-bottom: 14px;">🧬 Брейнроты (Steal the Brainrot)</h2>
+        <div id="brainrotShopList" class="brainrot-list">Загрузка...</div>
+        <hr style="margin: 20px 0;">
+        <h3>📦 Моя коллекция</h3>
+        <div id="myBrainrotsList">Пока пусто</div>
+    </div>
+
+    <div id="leaderboardPanel" class="panel" style="display: none;">
+        <h2 style="margin-bottom: 14px;">🌍 Топ игроков</h2>
+        <div id="leaderboardList">Загрузка...</div>
+    </div>
+
+    <div id="stealPanel" class="panel" style="display: none;">
+        <h2>🥷 Кража монет</h2>
+        <select id="playerSelect" class="input-field"><option value="">-- Выбери из списка --</option></select>
+        <input type="text" id="stealIdInput" class="input-field" placeholder="Введи полный ID друга">
+        <button class="btn" id="stealByIdBtn" style="width:100%; margin-bottom:10px;">🔍 Украсть по ID</button>
+        <button class="btn" id="stealButton" style="width:100%;">🔥 Украсть 15 монет (50%)</button>
+        <div id="stealFeedback" class="small-note" style="margin-top: 14px;"></div>
+        <hr>
+        <div class="small-note">⏱️ Кд кражи: 30 сек. Успех — получишь 15, у жертвы -15.</div>
+    </div>
+
+    <div id="messageArea" class="error-message" style="display: none;"></div>
+</div>
+
+<script>
+    // ---------- ЗАМЕНИ НА СВОЙ КОНФИГ FIREBASE ----------
+    const firebaseConfig = {
+ apiKey: "AIzaSyCy2SxNESAsGNwCkRcHyMDhhFB2EfF9BWo",
+  authDomain: "brainrot-game-f92a9.firebaseapp.com",
+  projectId: "brainrot-game-f92a9",
+  storageBucket: "brainrot-game-f92a9.firebasestorage.app",
+  messagingSenderId: "750166517158",
+  appId: "1:750166517158:web:dee535753c664b26641b67"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    
+    const BRAINROTS = {
+        skuf:     { name: '👴 Скуф',        price: 30,  bonus: 0.10 },
+        altushka: { name: '💅 Альтушка',    price: 50,  bonus: 0.15 },
+        sigma:    { name: '🗿 Сигма',       price: 100, bonus: 0.25 },
+        glaz:     { name: '👁️ Глаз Брейнрота', price: 200, bonus: 0.50 },
+        zhmyh:    { name: '🧀 Жмых',        price: 70,  bonus: 0.20 },
+        cybercat: { name: '🐱 Киберкот',    price: 150, bonus: 0.35 },
+        doomer:   { name: '🚬 Думер',       price: 250, bonus: 0.60 },
+        goblin:   { name: '👺 Гоблин',      price: 400, bonus: 0.80 },
+        cringe:   { name: '😬 Кринж',       price: 600, bonus: 1.50 }
+    };
+    
+    let currentPlayer = { coins: 0, clickPower: 1, multiplier: 1, brainrots: {} };
+    let playerId = localStorage.getItem('brainrot_player_id');
+    if (!playerId) {
+        playerId = 'user_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+        localStorage.setItem('brainrot_player_id', playerId);
+    }
+    
+    const playersRef = database.ref('players');
+    let allPlayers = {};
+    let lastStealTime = 0;
+    const STEAL_COOLDOWN = 30000;
+    const STEAL_AMOUNT = 15;
+    
+    const coinDisplay = document.getElementById('coinDisplay');
+    const playerIdSpan = document.getElementById('playerIdDisplay');
+    const clickPowerSpan = document.getElementById('clickPowerDisplay');
+    const multiplierSpan = document.getElementById('multiplierDisplay');
+    const brainrotBonusSpan = document.getElementById('brainrotBonusDisplay');
+    const clickerBtn = document.getElementById('clickerButton');
+    const buyClickUpgrade = document.getElementById('buyClickUpgrade');
+    const buyMultiplier = document.getElementById('buyMultiplier');
+    const leaderboardDiv = document.getElementById('leaderboardList');
+    const playerSelect = document.getElementById('playerSelect');
+    const stealBtn = document.getElementById('stealButton');
+    const stealByIdBtn = document.getElementById('stealByIdBtn');
+    const stealIdInput = document.getElementById('stealIdInput');
+    const stealFeedback = document.getElementById('stealFeedback');
+    const messageArea = document.getElementById('messageArea');
+    const onlineStatusSpan = document.getElementById('onlineStatus');
+    const brainrotShopDiv = document.getElementById('brainrotShopList');
+    const myBrainrotsDiv = document.getElementById('myBrainrotsList');
+    
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = {
+        shop: document.getElementById('shopPanel'),
+        brainrots: document.getElementById('brainrotsPanel'),
+        leaderboard: document.getElementById('leaderboardPanel'),
+        steal: document.getElementById('stealPanel')
+    };
+    
+    playerIdSpan.textContent = playerId;
+    
+    const myConnectionsRef = database.ref(`players/${playerId}/connections`);
+    const lastOnlineRef = database.ref(`players/${playerId}/lastOnline`);
+    const connectedRef = database.ref('.info/connected');
+    connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+            onlineStatusSpan.textContent = 'Онлайн';
+            const con = myConnectionsRef.push(true);
+            con.onDisconnect().remove();
+            lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+            
+            const playerRef = database.ref(`players/${playerId}/profile`);
+            playerRef.once('value').then(snapshot => {
+                if (!snapshot.exists()) {
+                    const initBrainrots = {};
+                    Object.keys(BRAINROTS).forEach(k => initBrainrots[k] = false);
+                    playerRef.set({
+                        coins: 20,
+                        clickPower: 1,
+                        multiplier: 1,
+                        brainrots: initBrainrots,
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+        } else {
+            onlineStatusSpan.textContent = 'Оффлайн';
+        }
+    });
+    
+    const myProfileRef = database.ref(`players/${playerId}/profile`);
+    myProfileRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            currentPlayer.coins = data.coins || 0;
+            currentPlayer.clickPower = data.clickPower || 1;
+            currentPlayer.multiplier = data.multiplier || 1;
+            currentPlayer.brainrots = data.brainrots || {};
+        } else {
+            currentPlayer.brainrots = {};
+        }
+        updateUI();
+        renderBrainrotShop();
+        renderMyBrainrots();
+    });
+    
+    playersRef.on('value', (snapshot) => {
+        allPlayers = snapshot.val() || {};
+        renderLeaderboard();
+        populateStealDropdown();
+    });
+    
+    function getTotalMultiplier() {
+        let bonus = 0;
+        for (let key in BRAINROTS) {
+            if (currentPlayer.brainrots && currentPlayer.brainrots[key]) bonus += BRAINROTS[key].bonus;
+        }
+        return currentPlayer.multiplier * (1 + bonus);
+    }
+    
+    function updateUI() {
+        coinDisplay.textContent = Math.floor(currentPlayer.coins);
+        clickPowerSpan.textContent = currentPlayer.clickPower;
+        multiplierSpan.textContent = currentPlayer.multiplier.toFixed(1);
+        let bonusPercent = 0;
+        for (let key in BRAINROTS) if (currentPlayer.brainrots?.[key]) bonusPercent += BRAINROTS[key].bonus * 100;
+        brainrotBonusSpan.textContent = bonusPercent.toFixed(0);
+    }
+    
+    // ИСПРАВЛЕННЫЙ КЛИКЕР: используем transaction
+    clickerBtn.addEventListener('click', () => {
+        const earned = currentPlayer.clickPower * getTotalMultiplier();
+        const coinRef = database.ref(`players/${playerId}/profile/coins`);
+        coinRef.transaction(currentCoins => (currentCoins || 0) + earned);
+        clickerBtn.style.transform = 'scale(0.98)';
+        setTimeout(() => clickerBtn.style.transform = '', 80);
+    });
+    
+    buyClickUpgrade.addEventListener('click', () => {
+        if (currentPlayer.coins >= 20) {
+            myProfileRef.update({
+                coins: currentPlayer.coins - 20,
+                clickPower: currentPlayer.clickPower + 1
+            });
+        } else showMessage('❌ Недостаточно монет');
+    });
+    buyMultiplier.addEventListener('click', () => {
+        if (currentPlayer.coins >= 80) {
+            myProfileRef.update({
+                coins: currentPlayer.coins - 80,
+                multiplier: currentPlayer.multiplier * 2
+            });
+        } else showMessage('❌ Недостаточно монет');
+    });
+    
+    function renderBrainrotShop() {
+        if (!currentPlayer.brainrots) return;
+        let html = '';
+        for (let key in BRAINROTS) {
+            const b = BRAINROTS[key];
+            const owned = currentPlayer.brainrots[key];
+            html += `<div class="brainrot-card">
+                <div><strong>${b.name}</strong><br><small>+${(b.bonus*100).toFixed(0)}% к множителю</small></div>
+                ${owned ? '<span class="owned-tag">✅ Куплено</span>' : `<button class="btn buy-brainrot" data-key="${key}" data-price="${b.price}">Купить (${b.price}🪙)</button>`}
+            </div>`;
+        }
+        brainrotShopDiv.innerHTML = html;
+        document.querySelectorAll('.buy-brainrot').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const key = btn.dataset.key;
+                const price = parseInt(btn.dataset.price);
+                if (currentPlayer.coins >= price) {
+                    const updates = {};
+                    updates[`brainrots/${key}`] = true;
+                    updates.coins = currentPlayer.coins - price;
+                    myProfileRef.update(updates);
+                } else showMessage('❌ Недостаточно монет');
+            });
+        });
+    }
+    
+    function renderMyBrainrots() {
+        const owned = [];
+        for (let key in BRAINROTS) if (currentPlayer.brainrots?.[key]) owned.push(BRAINROTS[key].name);
+        myBrainrotsDiv.innerHTML = owned.length ? owned.join(', ') : 'Пока пусто';
+    }
+    
+    function renderLeaderboard() {
+        const arr = [];
+        for (let id in allPlayers) {
+            const p = allPlayers[id]?.profile;
+            if (p) arr.push({ id, coins: p.coins || 0, online: !!allPlayers[id]?.connections });
+        }
+        arr.sort((a,b) => b.coins - a.coins);
+        let html = '';
+        arr.slice(0,20).forEach((p,i) => {
+            html += `<div class="leaderboard-item">
+                <div style="display:flex;align-items:center;">
+                    <span class="online-marker" style="background:${p.online?'#00e676':'#5a6a7a'};"></span>
+                    <span class="id-full">${i+1}. ${p.id} ${p.id===playerId?'(Вы)':''}</span>
+                </div>
+                <span class="coins">${Math.floor(p.coins)} 🪙</span>
+            </div>`;
+        });
+        leaderboardDiv.innerHTML = html || 'Нет игроков';
+    }
+    
+    function populateStealDropdown() {
+        let opts = '<option value="">-- Выбери из списка --</option>';
+        for (let id in allPlayers) {
+            if (id === playerId) continue;
+            const p = allPlayers[id]?.profile;
+            if (p && p.coins >= STEAL_AMOUNT) opts += `<option value="${id}">${id} (${Math.floor(p.coins)}🪙)</option>`;
+        }
+        playerSelect.innerHTML = opts;
+    }
+    
+    function attemptSteal(targetId) {
+        if (!targetId || targetId === playerId) { stealFeedback.textContent = 'Некорректный ID'; return; }
+        const now = Date.now();
+        if (now - lastStealTime < STEAL_COOLDOWN) {
+            stealFeedback.textContent = `⏳ Кд ${Math.ceil((STEAL_COOLDOWN - (now - lastStealTime))/1000)}с`;
+            return;
+        }
+        const targetProfile = allPlayers[targetId]?.profile;
+        if (!targetProfile) { stealFeedback.textContent = 'Игрок не найден'; return; }
+        if (targetProfile.coins < STEAL_AMOUNT) { stealFeedback.textContent = 'У игрока мало монет'; return; }
+        
+        lastStealTime = now;
+        const success = Math.random() < 0.5;
+        if (success) {
+            database.ref(`players/${targetId}/profile/coins`).transaction((c) => c >= STEAL_AMOUNT ? c - STEAL_AMOUNT : c, (err, comm) => {
+                if (comm) {
+                    database.ref(`players/${playerId}/profile/coins`).transaction(c => (c||0) + STEAL_AMOUNT);
+                    stealFeedback.textContent = `✅ Успех! +${STEAL_AMOUNT} 🪙`;
+                    showMessage(`🔥 Кража удалась! +${STEAL_AMOUNT}`);
+                } else stealFeedback.textContent = '❌ Не удалось (игрок потратил)';
+            });
+        } else stealFeedback.textContent = '😵 Провал! Тебя поймали.';
+        setTimeout(populateStealDropdown, 800);
+    }
+    
+    stealBtn.addEventListener('click', () => attemptSteal(playerSelect.value));
+    stealByIdBtn.addEventListener('click', () => attemptSteal(stealIdInput.value.trim()));
+    
+    function showMessage(t) { 
+        messageArea.style.display='block'; 
+        messageArea.textContent=t; 
+        setTimeout(()=>messageArea.style.display='none',3000); 
+    }
+    
+    tabs.forEach(t => t.addEventListener('click', () => {
+        const target = t.dataset.tab;
+        tabs.forEach(bt => bt.classList.remove('active')); 
+        t.classList.add('active');
+        for (let k in panels) panels[k].style.display = k === target ? 'block' : 'none';
+    }));
+    
+    updateUI();
+</script>
+</body>
+</html>
